@@ -1,6 +1,8 @@
 let users=[];
 let userContainer=document.getElementById('userContainer');
+let alert = document.getElementById('alert');
 function renderUsers(){
+    userContainer.innerHTML="";
     users.forEach((user)=>{
         let div = document.createElement('div');
         let name = document.createElement('p');
@@ -14,6 +16,23 @@ function renderUsers(){
     })
 }
 
+function doesUserExist(email){
+
+    let user = users.filter((user)=>{
+        return user.email==email;
+
+    })
+    return user.length>0 ? true :false;
+}
+
+function hideAlert(){
+
+    setTimeout(()=>{
+        alert.classList.remove('success','danger')
+
+    }, 2000)
+}
+
 function addUser(){
 
     let name = document.getElementById('name');
@@ -23,6 +42,18 @@ function addUser(){
         name : name.value,
         email : email.value,
     }
-    users.push(user);
+    let userExsit= doesUserExist(email.value);
+    if(userExsit==false){
+
+        users.push(user);
+        alert.classList.add('success');
+        alert.innerText='User added successfully!';
+        hideAlert();
+    }
+    else{
+        alert.classList.add('danger');
+        alert.innerText='Email already exist!';
+        hideAlert();
+    }
     renderUsers();
 }
